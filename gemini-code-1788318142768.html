@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>營養師 PGY 訓練歷程視覺化儀表板</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { background-color: #ffffff !important; overflow: visible !important; }
+      .main-container { height: auto !important; overflow: visible !important; }
+      .print-shadow-none { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased flex h-screen overflow-hidden main-container">
+
+  <aside id="sidebar" class="w-64 bg-emerald-950 text-emerald-100 flex flex-col transition-all duration-300 z-20 no-print flex-shrink-0">
+    <div class="h-16 flex items-center justify-between px-6 bg-emerald-900 border-b border-emerald-800">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white font-bold text-lg shadow-inner">
+          <i class="fa-solid fa-apple-whole"></i>
+        </div>
+        <span class="font-bold text-lg text-white tracking-wide">NutriTrack</span>
+      </div>
+      <button id="sidebarToggle" class="text-emerald-300 hover:text-white transition">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+      <div>
+        <p class="px-3 text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-3">主要功能</p>
+        <nav class="space-y-1">
+          <a href="#" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg bg-emerald-600 text-white shadow-sm">
+            <i class="fa-solid fa-chart-pie w-6"></i>
+            <span>學習儀表板</span>
+          </a>
+          <a href="#" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-emerald-300 hover:bg-emerald-900 hover:text-white transition">
+            <i class="fa-solid fa-clipboard-check w-6"></i>
+            <span>EPAs 信任評核</span>
+          </a>
+          <a href="#" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-emerald-300 hover:bg-emerald-900 hover:text-white transition">
+            <i class="fa-solid fa-book-medical w-6"></i>
+            <span>NCP 案例記錄</span>
+          </a>
+          <a href="#" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-emerald-300 hover:bg-emerald-900 hover:text-white transition">
+            <i class="fa-solid fa-bullseye w-6"></i>
+            <span>Milestones 評估</span>
+          </a>
+        </nav>
+      </div>
+
+      <div>
+        <p class="px-3 text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-3">訓練模組</p>
+        <nav class="space-y-1">
+          <a href="#" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-emerald-300 hover:bg-emerald-900 hover:text-white transition">
+            <i class="fa-solid fa-bed-pulse w-6"></i>
+            <span>臨床營養模組</span>
+          </a>
+          <a href="#" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-emerald-300 hover:bg-emerald-900 hover:text-white transition">
+            <i class="fa-solid fa-utensils w-6"></i>
+            <span>團體膳食管理</span>
+          </a>
+          <a href="#" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-emerald-300 hover:bg-emerald-900 hover:text-white transition">
+            <i class="fa-solid fa-users w-6"></i>
+            <span>社區營養衛教</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="p-4 border-t border-emerald-900 bg-emerald-900/50">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center font-bold text-sm">
+          營養
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-white truncate">林欣怡 營養師</p>
+          <p class="text-xs text-emerald-300 truncate">PGY-1 | 臨床營養組</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+    
+    <header class="bg-white border-b border-slate-200 h-16 px-8 flex items-center justify-between no-print sticky top-0 z-10 shadow-sm">
+      <div class="flex items-center space-x-4">
+        <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full">受訓進度：第 28 週 / 共 52 週</span>
+        <span class="text-sm text-slate-500">當前輪調：ICU 重症與管灌營養照護</span>
+      </div>
+      <div class="flex items-center space-x-3">
+        <button onclick="window.print()" class="flex items-center space-x-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-lg transition border border-slate-300">
+          <i class="fa-solid fa-print"></i>
+          <span>匯出學習檔案 (PDF)</span>
+        </button>
+        <button class="flex items-center space-x-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition shadow-sm">
+          <i class="fa-solid fa-plus"></i>
+          <span>填寫評估/照護表單</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white px-8 py-5 shadow-inner">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-xs text-emerald-200 flex items-center space-x-2 mb-1">
+            <span>首頁</span>
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            <span>學習歷程</span>
+            <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            <span class="text-white font-medium">營養師能力成長儀表板</span>
+          </div>
+          <h1 class="text-2xl font-bold tracking-tight">營養職類 (Dietitian) PGY 核心能力與歷程分析</h1>
+        </div>
+        <div class="text-right">
+          <p class="text-xs text-emerald-200">最新評量同步時間</p>
+          <p class="text-sm font-mono text-emerald-100">2026-09-02 09:15</p>
+        </div>
+      </div>
+    </div>
+
+    <main class="p-8 space-y-6">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition print-shadow-none">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase">EPA 平均信賴等級</span>
+            <span class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-chart-line"></i>
+            </span>
+          </div>
+          <div class="mt-2 flex items-baseline justify-between">
+            <span class="text-3xl font-bold text-slate-900">3.70</span>
+            <span class="text-xs font-semibold text-emerald-600 flex items-center">
+              <i class="fa-solid fa-arrow-up mr-1"></i> +0.3 (近1個月)
+            </span>
+          </div>
+          <p class="mt-1 text-xs text-slate-400">獨立執業門檻：Level 4.0</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition print-shadow-none">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase">NCP 臨床照護案例</span>
+            <span class="w-8 h-8 rounded-full bg-teal-50 text-teal-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-notes-medical"></i>
+            </span>
+          </div>
+          <div class="mt-2 flex items-baseline justify-between">
+            <span class="text-3xl font-bold text-slate-900">42 案</span>
+            <span class="text-xs font-semibold text-emerald-600">已達成年度 70%</span>
+          </div>
+          <p class="mt-1 text-xs text-slate-400">重症 12 案 / 慢性病門診 30 案</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition print-shadow-none">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase">臨床/衛教評核 (Mini-CEX/DOPS)</span>
+            <span class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-user-check"></i>
+            </span>
+          </div>
+          <div class="mt-2 flex items-baseline justify-between">
+            <span class="text-3xl font-bold text-slate-900">16 次</span>
+            <span class="text-xs font-semibold text-slate-500">本季 +4 次</span>
+          </div>
+          <p class="mt-1 text-xs text-slate-400">門診衛教 9 次 / 供膳檢核 7 次</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition print-shadow-none">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-slate-500 uppercase">臨床指導師回饋</span>
+            <span class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
+              <i class="fa-solid fa-comments"></i>
+            </span>
+          </div>
+          <div class="mt-2 flex items-baseline justify-between">
+            <span class="text-3xl font-bold text-slate-900">9 則</span>
+            <span class="text-xs font-semibold text-amber-600">待回覆心得 1 則</span>
+          </div>
+          <p class="mt-1 text-xs text-slate-400">最新回饋：重症營養支持 (陳督導)</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm print-shadow-none">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-base font-bold text-slate-800">營養核心能力評估 (Dietetic Milestones)</h3>
+              <p class="text-xs text-slate-500">自評 vs 指導營養師評定 vs 同期平均</p>
+            </div>
+            <span class="text-xs bg-emerald-50 text-emerald-700 font-medium px-2.5 py-1 rounded-md">Q3 季度評核</span>
+          </div>
+          <div class="h-72 relative">
+            <canvas id="dietRadarChart"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm print-shadow-none">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-base font-bold text-slate-800">NCP 核心 EPAs 信賴等級演進</h3>
+              <p class="text-xs text-slate-500">週次 1 至 28 信任等級變化 (Level 1~5)</p>
+            </div>
+            <select id="epaSelect" class="text-xs border border-slate-300 rounded-md px-2 py-1 bg-white text-slate-700">
+              <option>全項目綜合平均</option>
+              <option>EPA 1: 門診糖尿病營養評估與衛教</option>
+              <option>EPA 2: 加護病房腸道與靜脈營養調配</option>
+              <option>EPA 3: 供膳廚房衛生檢核與菜單開立</option>
+            </select>
+          </div>
+          <div class="h-72 relative">
+            <canvas id="dietLineChart"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm print-shadow-none">
+          <h3 class="text-base font-bold text-slate-800 mb-4">PGY 模組訓練進度與護照達標率</h3>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-700">臨床營養 (住院/門診) - 30 週</span>
+                <span class="text-emerald-600">67% (20/30 週，進行中)</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2.5">
+                <div class="bg-emerald-600 h-2.5 rounded-full" style="width: 67%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-700">團體膳食管理 (供膳/採購/HACCP) - 12 週</span>
+                <span class="text-teal-600">100% 已完成 (12/12 週)</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2.5">
+                <div class="bg-teal-600 h-2.5 rounded-full" style="width: 100%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-700">社區與預防醫學營養 - 10 週</span>
+                <span class="text-slate-400">0% (尚未輪調)</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2.5">
+                <div class="bg-slate-300 h-2.5 rounded-full" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm print-shadow-none">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base font-bold text-slate-800">臨床指導回饋與反思動態</h3>
+            <a href="#" class="text-xs text-emerald-600 hover:underline">查看全部記錄</a>
+          </div>
+          <div class="space-y-3">
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-100 flex items-start space-x-3">
+              <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 text-xs font-bold">
+                EPA
+              </div>
+              <div class="flex-1 text-xs">
+                <div class="flex justify-between">
+                  <span class="font-bold text-slate-800">EPA-ICU-02 重症管灌配方調整</span>
+                  <span class="text-slate-400">2 天前</span>
+                </div>
+                <p class="text-slate-600 mt-1">指導營養師：陳資深營養師 | 評定：<span class="font-bold text-emerald-600">Level 4 (可獨立執行)</span></p>
+                <p class="text-slate-500 italic mt-1">「熱量及蛋白質需求估算精確，對高血糖重症患者的配方替換掌握良好。」</p>
+              </div>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-100 flex items-start space-x-3">
+              <div class="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center flex-shrink-0 text-xs font-bold">
+                DOPS
+              </div>
+              <div class="flex-1 text-xs">
+                <div class="flex justify-between">
+                  <span class="font-bold text-slate-800">中央廚房出餐驗收與衛生抽檢</span>
+                  <span class="text-slate-400">上週</span>
+                </div>
+                <p class="text-slate-600 mt-1">指導營養師：黃組長 | 評定：<span class="font-bold text-teal-600">達標</span></p>
+                <p class="text-slate-500 italic mt-1">「中心溫度測量確實，留樣標準程序執行熟練。」</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // 側邊欄展開 / 收折互動控制
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('w-64');
+      sidebar.classList.toggle('w-20');
+    });
+
+    // 1. 初始化 營養核心能力雷達圖 (Radar Chart)
+    const ctxRadar = document.getElementById('dietRadarChart').getContext('2d');
+    new Chart(ctxRadar, {
+      type: 'radar',
+      data: {
+        labels: ['營養評估與診斷', '營養介入與計畫', '監測與成效評估', '團膳衛生管理', '衛教與溝通技巧', '專業素養與跨領域(IPE)'],
+        datasets: [
+          {
+            label: '學員自評',
+            data: [3.5, 3.2, 3.0, 4.2, 3.8, 4.0],
+            borderColor: 'rgba(16, 185, 129, 0.8)',
+            backgroundColor: 'rgba(16, 185, 129, 0.15)',
+            borderDash: [4, 4],
+            pointBackgroundColor: 'rgba(16, 185, 129, 1)'
+          },
+          {
+            label: '指導營養師評定',
+            data: [3.8, 3.6, 3.5, 4.5, 4.0, 4.2],
+            borderColor: 'rgba(13, 148, 136, 1)',
+            backgroundColor: 'rgba(13, 148, 136, 0.2)',
+            pointBackgroundColor: 'rgba(13, 148, 136, 1)'
+          },
+          {
+            label: '全國同期平均',
+            data: [3.2, 3.1, 3.0, 3.8, 3.5, 3.6],
+            borderColor: 'rgba(148, 163, 184, 0.6)',
+            backgroundColor: 'rgba(148, 163, 184, 0.05)',
+            pointBackgroundColor: 'rgba(148, 163, 184, 0.6)'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: {
+            min: 0,
+            max: 5,
+            ticks: { stepSize: 1 }
+          }
+        },
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+
+    // 2. 初始化 EPA 成長曲線折線圖 (Line Chart)
+    const ctxLine = document.getElementById('dietLineChart').getContext('2d');
+    new Chart(ctxLine, {
+      type: 'line',
+      data: {
+        labels: ['W1', 'W4', 'W8', 'W12', 'W16', 'W20', 'W24', 'W28'],
+        datasets: [
+          {
+            label: 'EPA 平均信賴等級',
+            data: [2.0, 2.3, 2.7, 3.0, 3.2, 3.4, 3.6, 3.7],
+            borderColor: 'rgba(13, 148, 136, 1)',
+            backgroundColor: 'rgba(13, 148, 136, 0.1)',
+            fill: true,
+            tension: 0.3
+          },
+          {
+            label: 'Level 4.0 獨立作業門檻',
+            data: [4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0],
+            borderColor: 'rgba(239, 68, 68, 0.7)',
+            borderDash: [5, 5],
+            pointRadius: 0,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            min: 1,
+            max: 5,
+            title: { display: true, text: '信賴等級 (Level 1~5)' }
+          },
+          x: {
+            title: { display: true, text: '訓練週次 (Weeks)' }
+          }
+        },
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
