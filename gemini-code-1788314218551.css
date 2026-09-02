@@ -1,0 +1,67 @@
+/* 重置基礎樣式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f7f9; /* 淺灰藍色背景 */
+    color: #333;
+}
+
+/* 整體佈局：使用 Flexbox 切分左右 */
+.dashboard-layout {
+    display: flex;
+    height: 100vh; /* 滿版高度 */
+}
+
+/* 1. 左側導覽列樣式 */
+.sidebar {
+    width: 250px;
+    background-color: #2c3e50; /* 深藍色 */
+    color: white;
+    padding: 20px;
+}
+
+/* 2. 右側主內容區樣式 */
+.main-content {
+    flex: 1; /* 佔滿剩下的空間 */
+    padding: 20px;
+    overflow-y: auto; /* 內容過多時可滾動 */
+}
+
+/* 藍色標題列 */
+.page-title-banner {
+    background-color: #4a90e2;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* 網格佈局：負責排列卡片 */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 切成四個等寬的直行 */
+    gap: 20px; /* 卡片之間的間距 */
+}
+
+/* 基礎卡片樣式 */
+.kpi-card, .chart-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* 淡淡的陰影 */
+}
+
+/* 雷達圖需要佔據兩行兩列的空間 */
+.radar-chart {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.course-progress {
+    grid-column: span 2;
+}
